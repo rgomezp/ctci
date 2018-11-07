@@ -29,10 +29,9 @@ void min_heap::insert(int val){
 
   }// rotate
   else{
-    
+
     return;
   }
-  cout<<"inserted "<<val<<endl;
 };
 
 void min_heap::remove(int val){

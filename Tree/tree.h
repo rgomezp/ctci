@@ -18,8 +18,17 @@ public:
   tree(int val):node_count(1){
     root = new tree_node(1, val, NULL, NULL);
   }
+  tree_node* get_root(){return root;}
+
+  // traversals
+  void iot(tree_node* node, void (*ptr)(tree_node* node));
+  void preot(tree_node* node, void (*ptr)(tree_node* node));
+  void postot(tree_node* node, void (*ptr)(tree_node* node));
+
+  // miscellaneous functions
   tree_node* find_node_by_id(int id);
   void bfs_print();
+  tree_node* find_ancestor(int id1, int id2);
 };
 
 string direction(int id, int node_id){
@@ -51,6 +60,7 @@ tree_node* tree::find_node_by_id(int id){
   return node_finder(id, root);
 }
 
+// --------- BFS PRINT ---------
 void tree::bfs_print(){
   queue<tree_node*> node_queue; // queue to add nodes to
   node_queue.push(root);
@@ -70,4 +80,55 @@ void tree::bfs_print(){
   }
   cout<<endl<<"------------------"<<endl;
   cout<<endl;
+}
+
+// --------- IN ORDER TRAVERSAL ---------
+void tree::iot(tree_node* node, void (*ptr)(tree_node* node)){
+  // base case
+  if(node == NULL) return;
+
+  // left
+  iot(node->left, (*ptr));
+
+  // root
+  (*ptr)(node);
+
+  // right
+  iot(node->right, (*ptr));
+}
+
+// --------- PRE ORDER TRAVERSAL ---------
+void tree::preot(tree_node* node, void (*ptr)(tree_node* node)){
+  // base case
+  if(node == NULL) return;
+
+  // root
+  (*ptr)(node);
+
+  // left
+  preot(node->left, (*ptr));
+
+  // right
+  preot(node->right, (*ptr));
+}
+
+// --------- POST ORDER TRAVERSAL ---------
+void tree::postot(tree_node* node, void (*ptr)(tree_node* node)){
+  // base case
+  if(node == NULL) return;
+
+  // left
+  postot(node->left, (*ptr));
+
+  // right
+  postot(node->right, (*ptr));
+
+  // root
+  (*ptr)(node);
+}
+
+// --------- COMMON ANCESTOR ---------: TO DO
+tree_node* tree::find_ancestor(int id1, int id2){
+  tree_node* root = get_root();
+  return root;
 }
