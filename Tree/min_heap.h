@@ -8,8 +8,20 @@ public:
   void insert(int val);
   void remove(int val);
   int get_min(){return root->val;}
-
+  void bubble_up(tree_node * node, tree_node * parent);
 };
+
+/*
+    2    replace 1 with 4
+
+  4 |
+ / \
+5   1
+*/
+
+void min_heap::bubble_up(tree_node * new_node, tree_node* parent){
+
+}
 
 void min_heap::insert(int val){
   node_count++;
@@ -18,7 +30,7 @@ void min_heap::insert(int val){
   tree_node* parent = find_node_by_id(node_count/2);
 
   // new node
-  tree_node* new_node = new tree_node(node_count, val, NULL, NULL);
+  tree_node* new_node = new tree_node(node_count, val, NULL, NULL, parent);
 
   // make sure it is larger
   if(val >= parent->val){
@@ -29,7 +41,8 @@ void min_heap::insert(int val){
 
   }// rotate
   else{
-
+    // bubble up
+    bubble_up(new_node, parent);
     return;
   }
 };

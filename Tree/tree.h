@@ -3,11 +3,12 @@
 using namespace std;
 
 struct tree_node{
-  tree_node(int id, int val, tree_node* left, tree_node* right):id(id),val(val),left(left),right(right){}
+  tree_node(int id, int val, tree_node* left, tree_node* right, tree_node* parent):id(id),val(val),left(left),right(right), parent(parent){}
   int id;
   int val;
   tree_node* left;
   tree_node* right;
+  tree_node* parent;
 };
 
 class tree{
@@ -16,7 +17,7 @@ protected:
   int node_count;
 public:
   tree(int val):node_count(1){
-    root = new tree_node(1, val, NULL, NULL);
+    root = new tree_node(1, val, NULL, NULL, NULL);
   }
   tree_node* get_root(){return root;}
 
@@ -31,6 +32,7 @@ public:
   tree_node* find_ancestor(int id1, int id2);
 };
 
+// ------- NODE FINDER HELPER --------
 string direction(int id, int node_id){
   // id is target id
   // node_id is current node id
@@ -44,6 +46,8 @@ string direction(int id, int node_id){
   return direction(id/2, node_id);
 }
 
+
+// ------- NODE FINDER ---------
 tree_node* node_finder(int id, tree_node* node){
   if(node->id == id) return node;
 
@@ -76,7 +80,7 @@ void tree::bfs_print(){
 
     // print node
     cout <<node->val<<' ';
-    if(node->id == 1 || node->id == 3 || node->id == 7) cout<<endl;
+    if(node->id == 1 || node->id == 3 || node->id == 7 || node->id==15) cout<<endl;
   }
   cout<<endl<<"------------------"<<endl;
   cout<<endl;
@@ -127,8 +131,23 @@ void tree::postot(tree_node* node, void (*ptr)(tree_node* node)){
   (*ptr)(node);
 }
 
+// --------- COMMON ANCESTOR HELPER ---------
+tree_node* ancestor_helper(tree_node* node, int id1, int id2){
+  // base case
+  if(node == NULL) return NULL;
+  if(node->id == id1 || node->id == id2) return node;
+
+  tree_node* left = ancestor_helper(node->left, id1, id2);
+  tree_node* right = ancestor_helper(node->right, id1, id2);
+
+  if(left && right) return node;
+  if(left) return left;
+  if(right) return right;
+  else return NULL;
+}
+
 // --------- COMMON ANCESTOR ---------: TO DO
 tree_node* tree::find_ancestor(int id1, int id2){
   tree_node* root = get_root();
-  return root;
+  return ancestor_helper(root, id1, id2);
 }
